@@ -1,5 +1,6 @@
 
 FileDir=$1
+deleteNum=$2
 
 FileName="/mnt/mmc/log/remainingFileSize.log"
 
@@ -19,12 +20,22 @@ if [ ! -d "$FileDir" ]; then
 fi
 
 cd $FileDir
+echo $FileDir
+num=0
+while :
+do
+	if [ $num -eq $deleteNum ]; then
+		exit 0	
+	fi
+	OldFile=$(ls -rt  *.log*| head -1)
 
-OldFile=$(ls -rt  *-*.log*| head -1)
-if [ ! -f "$OldFile" ]; then
-	exit 0
-fi
+	if [ ! -f "$OldFile" ]; then
+		exit 0
+	fi
 
-echo  "Delete File:" $OldFile
-rm -rf $OldFile
+	echo  "Delete File:" $OldFile
+	rm -rf $OldFile
+	let num=num+1
+	echo $num
+done
 
